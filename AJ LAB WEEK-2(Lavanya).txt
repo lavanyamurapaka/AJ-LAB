@@ -1,0 +1,186 @@
+AJ LAB WEEK-2
+
+JDBC PROJECT FOR STUDENT DATA
+
+Prompt:
+
+Act as a senior Java professional who has experience developing Java applications using JDBC, JSP, and Servlets. Develop a JDBC application which will interact with a database and perform the following tasks:
+
+Create a student table with roll number, name, and address.
+Insert a few records.
+Perform update and delete operations.
+Display the contents of the records.
+
+I am a basic learner. I want to execute the above JDBC program in a Linux environment. Could you please guide me on how to develop and execute the above JDBC program in Linux environment from scratch.
+
+
+STEPS:
+
+1. Open Terminal:
+      mkdir folder_name
+      cd folder_name
+
+2. Check Java Version:
+      java --version
+   If Java is not installed:
+      sudo apt update
+      sudo apt install openjdk-17-jdk
+
+3. Install MySQL:
+      sudo apt update
+      sudo apt install mysql-server
+      sudo systemctl status mysql
+      sudo systemctl enable MySQL
+
+4. Login to MySQL:
+      sudo MySQL
+   Create Database:
+      CREATE DATABASE studentdb;
+      USE studentdb;
+
+5. Create MySQL User:
+      sudo MySQL
+   Execute:
+      CREATE USER 'lavanya'@'localhost'
+      IDENTIFIED BY 'lavanya29';
+
+      GRANT ALL PRIVILEGES
+      ON studentdb.*
+      TO 'lavanya'@'localhost';
+
+      FLUSH PRIVILEGES;
+      EXIT;
+
+7. Create Project Folder:
+      mkdir -p JDBCProject/src JDBCProject/lib
+      cd JDBCProject
+
+8. Download JDBC Driver:
+      wget -P lib https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/9.1.0/mysql-connector-j-9.1.0.jar
+
+9.To see the project structure:
+      ls -R
+
+10.Write a java program:
+      cd src
+      nano StudentJDBC.java
+
+11.Java program:
+   import java.sql.*;
+
+   public class StudentJDBC {
+
+    static final String URL = "jdbc:mysql://localhost:3306/studentdb";
+    static final String USER = "lavanya";
+    static final String PASSWORD = "lavanya29";
+
+    public static void main(String[] args) {
+
+        try {
+            // Load JDBC Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Create Connection
+            Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            Statement stmt = con.createStatement();
+
+            // Create Table
+            String createTable = "CREATE TABLE IF NOT EXISTS student (" +
+                    "rollno INT PRIMARY KEY, " +
+                    "name VARCHAR(50), " +
+                    "address VARCHAR(100))";
+
+            stmt.executeUpdate(createTable);
+            System.out.println("Table created successfully.");
+
+            // Insert Records
+            stmt.executeUpdate(
+                    "INSERT INTO student VALUES (101,'Lavanya','Bhimavaram')");
+            stmt.executeUpdate(
+                    "INSERT INTO student VALUES (102,'Anitha','Vijayawada')");
+            stmt.executeUpdate(
+                    "INSERT INTO student VALUES (103,'Ravi','Hyderabad')");
+
+            System.out.println("Records inserted successfully.");
+
+            // Update Record
+            stmt.executeUpdate(
+                    "UPDATE student SET address='Visakhapatnam' WHERE rollno=102");
+
+            System.out.println("Record updated successfully.");
+
+            // Delete Record
+            stmt.executeUpdate(
+                    "DELETE FROM student WHERE rollno=103");
+
+            System.out.println("Record deleted successfully.");
+
+            // Display Records
+            ResultSet rs = stmt.executeQuery("SELECT * FROM student");
+
+            System.out.println("\nStudent Records");
+            System.out.println("-------------------------------");
+
+            while (rs.next()) {
+                System.out.println(
+                        rs.getInt("rollno") + "  " +
+                        rs.getString("name") + "  " +
+                        rs.getString("address"));
+            }
+
+            rs.close();
+            stmt.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+12.path:
+      cd..
+      ls
+   output-
+      lib
+      src
+13.Compile the program:
+      javac -cp "lib/*" src/StudentJDBC.java
+14.Execute the program:
+      java -cp "lib/*:src" StudentJDBC
+    
+   Output:  
+      Table created successfully.
+      Records inserted successfully.
+      Record updated successfully.
+      Record deleted successfully.
+
+      Student Records
+      -------------------------------
+      101  Lavanya  Bhimavaram
+      102  Anitha   Visakhapatnam 
+
+15.Verify in MySQL:
+    Login:
+      MySQL -u lavanya -p
+    password:
+      Enter the password
+    To show all databases:
+      SHOW DATABASES;
+    use database:
+      USE studentdb;
+    check:
+      SELECT * FROM student;
+
+      
+
+
+
+
+
+
+
+
+
+
