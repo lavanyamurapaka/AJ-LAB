@@ -33,7 +33,7 @@ STEPS:
       sudo systemctl enable MySQL
 
 4. Login to MySQL:
-      sudo MySQL
+      sudo mysql
    Create Database:
       CREATE DATABASE studentdb;
       USE studentdb;
