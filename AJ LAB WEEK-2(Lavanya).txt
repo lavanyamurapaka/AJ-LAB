@@ -163,7 +163,7 @@ STEPS:
 
 15.Verify in MySQL:
     Login:
-      MySQL -u lavanya -p
+      mysql -u lavanya -p
     password:
       Enter the password
     To show all databases:
